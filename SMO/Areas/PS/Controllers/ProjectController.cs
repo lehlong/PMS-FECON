@@ -114,6 +114,29 @@ namespace SMO.Areas.PS.Controllers
 
         [HttpPost]
         [MyValidateAntiForgeryToken]
+        public ActionResult SyncProjectToSAP(Guid projectId)
+        {
+            var result = new TransferObject
+            {
+                Type = TransferType.AlertSuccessAndJsCommand
+            };
+            _service.ObjDetail.ID = projectId;
+            _service.PostDataToSAP(projectId);
+            if (_service.State)
+            {
+                SMOUtilities.GetMessage("1002", _service, result);
+                //result.ExtData = string.Format("try{{SubmitIndex();}}catch(e){{}}; try{{onClickGeneralInformation_Edit();}}catch(e){{}};");
+            }
+            else
+            {
+                result.Type = TransferType.AlertDanger;
+                SMOUtilities.GetMessage("1005", _service, result);
+            }
+            return result.ToJsonResult();
+        }
+
+        [HttpPost]
+        [MyValidateAntiForgeryToken]
         public ActionResult CloseProject(Guid id)
         {
             var result = new TransferObject

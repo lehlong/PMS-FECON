@@ -592,7 +592,7 @@
 
     function UpdateProjectSAP() {
         Forms.Ajax({
-            url: 'PS/Project/UpdateProjectSAP',
+            url: 'PS/Project/SyncProjectToSAP',
             type: "POST",
             data: { projectId: "@projectId" },
             dataType: "json",
