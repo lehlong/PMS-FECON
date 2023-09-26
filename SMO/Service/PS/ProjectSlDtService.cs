@@ -17,6 +17,12 @@ using static NPOI.HSSF.Util.HSSFColor;
 
 namespace SMO.Service.PS
 {
+    public class DtSlModel
+    {
+        public Guid TimeId { get; set; }
+        public decimal Value { get; set; }
+        public decimal? Price { get; set; }
+    }
     public class ProjectSlDtService : GenericService<T_PS_SL_DT, ProjectSlDtRepo>
     {
         public override void Search()
@@ -230,12 +236,22 @@ namespace SMO.Service.PS
                            join y in projectStructure on x.PROJECT_STRUCT_ID equals y.ID
                            select new
                            {
+                               Id = y.ID,
+                               Parent = y.PARENT_ID,
                                TimeId = x.TIME_PERIOD_ID,
                                Value = x.VALUE,
                                Price = y.PRICE
                            }).ToList();
+            var data = from x in costSum
+                       let checkParent = costSum.Any(y => y.Id == x.Parent && x.TimeId == y.TimeId && y.Value != 0)
+                       select new
+                       {
+                           TimeId = x.TimeId,
+                           Price = checkParent || x.Price == null ? 0 : x.Price,
+                           Value = checkParent || x.Value == null ? 0 : x.Value,
+                       };
 
-            var valueCost = from x in costSum
+            var valueCost = from x in data
                             group x by x.TimeId into y
                             select new
                             {

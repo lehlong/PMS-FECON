@@ -412,6 +412,7 @@
                     var totalVolumePlan = calculateTotalVolumePlan(dataCell[indexSelectCell + i]);
                     if (totalVolumePlan > dataCell[indexSelectCell + i].quantity) {
                         setAlertColumn(dataCell[indexSelectCell + i].id)
+                        console.log(dataCell[indexSelectCell + i])
                         errorCheck++;
                     } else {
                         removeAlertColumn(dataCell[indexSelectCell + i].id)

@@ -103,6 +103,7 @@
     }
     $(function () {
         const rawData = @Html.Raw(JsonConvert.SerializeObject(data));
+        console.log(rawData)
         const timePeriods = @Html.Raw(JsonConvert.SerializeObject(timePeriods));
         const criteriaGroup = _.chain(rawData)
             .map(x => ({ ...x, TIME_PERIOD_INDEX: x.TimePeriod.C_ORDER, CRITERIA_NAME: x.Criteria.NAME }))
